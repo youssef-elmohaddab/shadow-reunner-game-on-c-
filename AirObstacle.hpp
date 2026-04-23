@@ -12,12 +12,10 @@ public:
                 int   frames  = 3,
                 float animSpd = 0.10f);
 
-    // Polymorphic override: air obstacles add a gentle vertical sine-wave
-    // (swooping motion) on top of the base leftward drift.
     void update(float dt) override;
 
 private:
-    float timeAccum;   // accumulates elapsed time for the sine wave
+    float timeAccum;
 };
 
 #endif

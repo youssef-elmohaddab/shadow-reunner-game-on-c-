@@ -7,7 +7,6 @@
 #include <cmath>
 #include <algorithm>
 
-// ── Texture loader with exception handling ───────────────────────────────
 sf::Texture GameWorld::loadTexture(const std::string& path)
 {
     sf::Texture tex;
@@ -16,7 +15,6 @@ sf::Texture GameWorld::loadTexture(const std::string& path)
     return tex;
 }
 
-// ── Constructor ───────────────────────────────────────────────────────────
 GameWorld::GameWorld(sf::RenderWindow& window, int level)
     : bgTexture    (loadTexture("data/images/background.png")),
       groundObsTex (loadTexture("data/images/groundObstacle.png")),
@@ -38,7 +36,7 @@ GameWorld::GameWorld(sf::RenderWindow& window, int level)
     const float sw   = static_cast<float>(window.getSize().x);
     const float sh   = static_cast<float>(window.getSize().y);
 
-    // Window icon — non-fatal if missing
+    // Icône de fenêtre — non fatal si manquant
     try {
         if (!icon.loadFromFile("data/images/icon.png"))
             throw std::runtime_error("icon not found");
@@ -56,7 +54,7 @@ GameWorld::GameWorld(sf::RenderWindow& window, int level)
 
     minSpawnDistance = levelCfg.spawnDensity;
 
-    // Background scaling
+    // Mise à l'échelle de l'arrière-plan
     float scaleY = sh / static_cast<float>(bgTexture.getSize().y);
     bgSprite1.setScale({scaleY, scaleY});
     bgSprite2.setScale({scaleY, scaleY});
@@ -84,12 +82,11 @@ GameWorld::~GameWorld()
 Player& GameWorld::getPlayer()             { return player; }
 int     GameWorld::getRewardsCollected() const { return rewardsCollected; }
 
-// ── Update ────────────────────────────────────────────────────────────────
 GameWorld::HitResult GameWorld::update(float dt)
 {
     player.update(dt);
 
-    // Polymorphic dispatch: each Obstacle subclass runs its own update()
+    // Chaque sous-classe Obstacle exécute son propre update()
     for (auto* obs : obstacles)
         obs->update(dt);
 
@@ -103,15 +100,15 @@ GameWorld::HitResult GameWorld::update(float dt)
 
     sf::FloatRect ph = player.getHitbox();
 
-    // Reward collection — virtual collect() via base ref
+    // Collecte de récompenses
     for (auto& rew : rewards)
         if (!rew.isCollected() && rew.getBounds().findIntersection(ph))
         {
             rew.collect();
-            ++rewardsCollected;   // update scoreboard counter
+            ++rewardsCollected;
         }
 
-    // Bunker win condition
+    // Condition de victoire (bunker)
     if (bunker && !bunker->isReached())
     {
         float playerCX   = ph.position.x + ph.size.x * 0.5f;
@@ -127,7 +124,7 @@ GameWorld::HitResult GameWorld::update(float dt)
         }
     }
 
-    // Obstacle collision
+    // Collision avec obstacle
     HitResult result = HitResult::None;
     if (hitCooldown > 0.f)
     {
@@ -161,7 +158,6 @@ GameWorld::HitResult GameWorld::update(float dt)
     return result;
 }
 
-// ── Render ────────────────────────────────────────────────────────────────
 static void drawRect(sf::RenderWindow& w, sf::FloatRect r, sf::Color c)
 {
     sf::RectangleShape s({r.size.x, r.size.y});
@@ -176,7 +172,7 @@ void GameWorld::render(sf::RenderWindow& window)
 {
     window.draw(bgSprite1);
     window.draw(bgSprite2);
-    // Polymorphic dispatch: each subclass renders itself
+    // Chaque sous-classe se rend elle-même
     for (auto* obs : obstacles) obs->render(window);
     for (auto& rew : rewards)   rew.render(window);
     if (bunker) bunker->render(window);
@@ -201,7 +197,6 @@ void GameWorld::render(sf::RenderWindow& window)
     }
 }
 
-// ── Spawn / Cleanup ───────────────────────────────────────────────────────
 void GameWorld::spawnObstacleIfNeeded()
 {
     float spawnX = player.getPosition().x + 900.f;

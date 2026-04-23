@@ -57,7 +57,7 @@ void Menu::draw(sf::RenderWindow& window)
 
 Menu::Choice Menu::handleEvent(const sf::Event& event, sf::RenderWindow& window)
 {
-    // --- Keyboard ---
+
     if (const auto* key = event.getIf<sf::Event::KeyPressed>())
     {
         if (key->scancode == sf::Keyboard::Scancode::Up)
@@ -86,7 +86,6 @@ Menu::Choice Menu::handleEvent(const sf::Event& event, sf::RenderWindow& window)
         }
     }
 
-    // --- Mouse hover ---
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>())
     {
         sf::Vector2f mouse = window.mapPixelToCoords(moved->position);
@@ -103,7 +102,6 @@ Menu::Choice Menu::handleEvent(const sf::Event& event, sf::RenderWindow& window)
         }
     }
 
-    // --- Mouse click ---
     if (const auto* click = event.getIf<sf::Event::MouseButtonPressed>())
     {
         if (click->button == sf::Mouse::Button::Left)

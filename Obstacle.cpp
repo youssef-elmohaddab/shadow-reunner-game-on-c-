@@ -27,7 +27,6 @@ Obstacle::Obstacle(sf::Vector2f pos, ObstacleType m_type,
     sprite.setPosition(position);
 }
 
-// ── virtual update: base implementation (shared by Ground & Air) ──────────
 void Obstacle::update(float dt)
 {
     animTimer += dt;
@@ -43,13 +42,11 @@ void Obstacle::update(float dt)
     sprite.setPosition(position);
 }
 
-// ── virtual render ────────────────────────────────────────────────────────
 void Obstacle::render(sf::RenderWindow& w)
 {
     w.draw(sprite);
 }
 
-// ── virtual getType ───────────────────────────────────────────────────────
 Obstacle::ObstacleType Obstacle::getType() const
 {
     return type;

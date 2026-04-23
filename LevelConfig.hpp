@@ -6,12 +6,12 @@
 struct LevelConfig
 {
     int   level;
-    float goalX;          // world X where the bunker sits
-    float baseSpeed;      // reference player speed
-    float timeLimit;      // seconds allowed
-    float groundObsSpeed; // spider leftward speed (px/s)
-    float airObsSpeed;    // bat/bird leftward speed (px/s)
-    float spawnDensity;   // min gap between obstacles (smaller = harder)
+    float goalX;
+    float baseSpeed;
+    float timeLimit;
+    float groundObsSpeed;
+    float airObsSpeed;
+    float spawnDensity;
 };
 
 inline LevelConfig makeLevelConfig(int level)

@@ -12,7 +12,7 @@ Reward::Reward(const sf::Texture& tex, sf::Vector2f pos, float size)
     sprite.setPosition(pos);
 }
 
-void          Reward::update(float /*dt*/) {}
+void          Reward::update(float ) {}
 
 void          Reward::render(sf::RenderWindow& window)
 {

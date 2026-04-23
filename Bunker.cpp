@@ -8,12 +8,11 @@ Bunker::Bunker(const sf::Texture& tex, sf::Vector2f pos, float w, float h)
     if (texW > 0.f && texH > 0.f)
         sprite.setScale({w / texW, h / texH});
 
-
     sprite.setOrigin({0.f, static_cast<float>(tex.getSize().y)});
     sprite.setPosition(position);
 }
 
-void          Bunker::update(float /*dt*/) {}
+void          Bunker::update(float ) {}
 void          Bunker::render(sf::RenderWindow& w)
 {
     w.draw(sprite);

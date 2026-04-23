@@ -12,8 +12,6 @@ public:
                    int   frames  = 3,
                    float animSpd = 0.12f);
 
-    // Uses the base Obstacle::update / render — explicitly noted for clarity.
-    // Override here if ground-specific behaviour is needed in the future.
 };
 
 #endif
