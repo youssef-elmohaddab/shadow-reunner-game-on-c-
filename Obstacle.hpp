@@ -13,16 +13,14 @@ protected:
     sf::Vector2f    position;
     ObstacleType    type;
 
-    // Animation
     int     frameCount;
     int     currentFrame;
     float   animTimer;
-    float   animSpeed;      // seconds per frame
+    float   animSpeed;
     int     frameW;
     int     frameH;
 
-    // Movement
-    float   moveSpeed;      // leftward drift speed (px/s)
+    float   moveSpeed;
 
 public:
     Obstacle(sf::Vector2f pos, ObstacleType m_type,
@@ -34,13 +32,9 @@ public:
 
     virtual ~Obstacle() = default;
 
-    // ── Polymorphic interface ──────────────────────────────────────────────
-    // Subclasses may override to add type-specific behaviour (e.g. swooping
-    // flight for AirObstacle, burrowing for future GroundObstacle variants).
     virtual void          update(float dt);
     virtual void          render(sf::RenderWindow& window);
     virtual ObstacleType  getType()   const;
-    // ──────────────────────────────────────────────────────────────────────
 
     float           getX()      const;
     float           getY()      const;

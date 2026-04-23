@@ -50,8 +50,8 @@ public:
     void update(float dt);
     void render(sf::RenderWindow& window);
 
-    sf::FloatRect getBounds() const;   // full sprite bounds (for rendering debug)
-    sf::FloatRect getHitbox() const;   // tight state-aware hitbox (for collision)
+    sf::FloatRect getBounds() const;
+    sf::FloatRect getHitbox() const;
 };
 
 #endif

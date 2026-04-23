@@ -25,14 +25,13 @@ void LevelSelect::build(sf::RenderWindow& window)
     const float sw = static_cast<float>(window.getSize().x);
     const float sh = static_cast<float>(window.getSize().y);
 
-    // Title
+    // Titre
     titleText = sf::Text(font, "Select Level", 52u);
     titleText.setFillColor(sf::Color::White);
     auto tb = titleText.getLocalBounds();
     titleText.setOrigin({tb.size.x / 2.f, 0.f});
     titleText.setPosition({sw / 2.f, sh * 0.08f});
 
-    // 10 level buttons in 2 rows of 5
     const int   cols  = 5;
     const float btnW  = 110.f;
     const float btnH  = 100.f;
@@ -62,13 +61,12 @@ void LevelSelect::build(sf::RenderWindow& window)
         labels.push_back(txt);
     }
 
-    // Back button — below both rows
+    // Bouton Retour — sous les deux rangées
     float backY = row1Y + btnH + gapY * 2.f;
     backBtn.setSize({160.f, 55.f});
     backBtn.setPosition({sw / 2.f - 80.f, backY});
     backBtn.setOutlineThickness(2.f);
 
-    // backText = sf::Text(font, "Back", 32u);
     auto bb = backText.getLocalBounds();
     backText.setOrigin({bb.size.x / 2.f, bb.size.y / 2.f});
     backText.setPosition({sw / 2.f, backY + 27.f});
@@ -123,7 +121,7 @@ void LevelSelect::draw(sf::RenderWindow& window)
 
 int LevelSelect::handleEvent(const sf::Event& event, sf::RenderWindow& window)
 {
-    // Keyboard navigation
+    // Navigation au clavier
     if (const auto* key = event.getIf<sf::Event::KeyPressed>())
     {
         if (key->scancode == sf::Keyboard::Scancode::Left)
@@ -145,14 +143,14 @@ int LevelSelect::handleEvent(const sf::Event& event, sf::RenderWindow& window)
         else if (key->scancode == sf::Keyboard::Scancode::Enter ||
                  key->scancode == sf::Keyboard::Scancode::Space)
         {
-            if (selected == kTotalLevels) return -2;           // back
-            if (selected < unlockedLevels) return selected;    // play
+            if (selected == kTotalLevels) return -2;
+            if (selected < unlockedLevels) return selected;
         }
         else if (key->scancode == sf::Keyboard::Scancode::Escape)
             return -2;
     }
 
-    // Mouse hover
+    // Survol de la souris
     if (const auto* moved = event.getIf<sf::Event::MouseMoved>())
     {
         sf::Vector2f mouse = window.mapPixelToCoords(moved->position);
@@ -169,7 +167,7 @@ int LevelSelect::handleEvent(const sf::Event& event, sf::RenderWindow& window)
         }
     }
 
-    // Mouse click
+    // Clic de la souris
     if (const auto* click = event.getIf<sf::Event::MouseButtonPressed>())
     {
         if (click->button == sf::Mouse::Button::Left)

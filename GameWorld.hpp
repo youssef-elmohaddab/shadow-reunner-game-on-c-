@@ -28,7 +28,7 @@ private:
     sf::Image icon;
 
     Player                  player;
-    std::vector<Obstacle*>  obstacles;   // polymorphic: Ground* or Air*
+    std::vector<Obstacle*>  obstacles;
     std::vector<Reward>     rewards;
     Bunker*                 bunker;
 
@@ -45,7 +45,7 @@ private:
     LevelConfig levelCfg;
 
     float       hitCooldown;
-    int         rewardsCollected;   // NEW: scoreboard counter
+    int         rewardsCollected;
     static constexpr float kHitCooldown = 1.5f;
 
 public:
@@ -61,12 +61,11 @@ public:
     ~GameWorld();
 
     Player& getPlayer();
-    int     getRewardsCollected() const;   // NEW
+    int     getRewardsCollected() const;
 
     HitResult update(float dt);
     void      render(sf::RenderWindow& window);
 
-    // Expose reward texture so Game can draw the HUD scoreboard icon
     const sf::Texture& getRewardTexture() const { return rewardTex; }
 };
 

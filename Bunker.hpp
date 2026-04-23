@@ -13,7 +13,7 @@ private:
 public:
     Bunker(const sf::Texture& tex, sf::Vector2f pos, float w, float h);
 
-    void          update(float dt);   // reserved for future animation
+    void          update(float dt);
     void          render(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
     bool          isReached() const;

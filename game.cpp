@@ -5,12 +5,11 @@
 #include <iostream>
 #include <stdexcept>
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Music helpers
-// ─────────────────────────────────────────────────────────────────────────────
+// Fonctions auxiliaires pour la musique
+
 void Game::startMenuMusic()
 {
-    // Stop game music if running
+    // Arrête la musique du jeu si elle joue
     if (gameMusic) gameMusic->stop();
 
     try {
@@ -22,7 +21,7 @@ void Game::startMenuMusic()
         menuMusic->play();
     } catch (const std::exception& e) {
         std::cerr << "Warning: " << e.what() << "\n";
-        menuMusic.reset();   // leave null — music simply absent
+        menuMusic.reset();   // laisse nul — musique simplement absente
     }
 }
 
@@ -56,7 +55,7 @@ void Game::swapPauseTexture(bool paused)
     float th = static_cast<float>(t.getSize().y);
     if (tw == 0.f || th == 0.f) return;
 
-    // Preserve position before rebuilding
+    // Préserve la position avant reconstruction
     sf::Vector2f pos = pauseBtn ? pauseBtn->getPosition() : sf::Vector2f{0.f, 0.f};
     pauseBtn.emplace(t);
     pauseBtn->setScale({kBtnSize / tw, kBtnSize / th});
@@ -70,7 +69,7 @@ void Game::applyMuteState()
     if (menuMusic) menuMusic->setVolume(vol);
     if (gameMusic) gameMusic->setVolume(vol);
 
-    // Also silence / restore sound effects
+    // Coupe/rétablit aussi les effets sonores
     float sfxVol = musicMuted ? 0.f : 100.f;
     if (hitSound)     hitSound->setVolume(sfxVol);
     if (collectSound) collectSound->setVolume(sfxVol);
@@ -87,9 +86,8 @@ void Game::applyMuteState()
     muteHitbox = muteBtn->getGlobalBounds();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Constructor
-// ─────────────────────────────────────────────────────────────────────────────
+// Constructeur
+
 Game::Game(sf::Vector2u windowSize)
     : window(sf::VideoMode({windowSize.x, windowSize.y}), "Shadow Runner"),
       camera(sf::FloatRect({0.f, 0.f},
@@ -105,15 +103,14 @@ Game::Game(sf::Vector2u windowSize)
       prevRewardsCollected(0),
       timeLeft(kBaseDuration),
       freezeTimer(0.f),
-      // sf::Text requires a font — use a temporary empty font here;
-      // all three texts are reassigned in the body once uiFont is loaded.
+
       timerText(uiFont, "", 26u),
       rewardCountText(uiFont, "x0", 22u)
-      // pauseBtn / muteBtn are std::optional — filled in initHUD after textures load
+
 {
     window.setVerticalSyncEnabled(true);
 
-    // Font — exception-handled
+    // Police — gérée avec exceptions
     try {
         if (!uiFont.openFromFile("data/fonts/arial.ttf"))
             throw std::runtime_error("Could not load UI font");
@@ -121,11 +118,11 @@ Game::Game(sf::Vector2u windowSize)
         std::cerr << "Warning: " << e.what() << "\n";
     }
 
-    // Re-initialise text objects now that uiFont is loaded
+    // Réinitialise les textes après chargement de la police
     timerText       = sf::Text(uiFont, "", 26u);
     rewardCountText = sf::Text(uiFont, "x0", 22u);
 
-    // Heart texture
+    // Texture du cœur
     try {
         if (!heartTexture.loadFromFile("data/images/heart.png"))
             throw std::runtime_error("Could not load heart texture");
@@ -133,11 +130,11 @@ Game::Game(sf::Vector2u windowSize)
         std::cerr << "Warning: " << e.what() << "\n";
     }
 
-    // Menu background
+    // Arrière-plan du menu
     try {
         if (!menuBgTexture.loadFromFile("data/images/menuBackground.png"))
             throw std::runtime_error("Could not load menu background");
-        // Construct into the optional now that the texture is ready
+        // Construit dans l'optional maintenant que la texture est prête
         menuBgSprite.emplace(menuBgTexture);
         menuBgSprite->setScale({
             static_cast<float>(window.getSize().x) / menuBgTexture.getSize().x,
@@ -147,8 +144,7 @@ Game::Game(sf::Vector2u windowSize)
         std::cerr << "Warning: " << e.what() << "\n";
     }
 
-    // ── Sound effects ─────────────────────────────────────────────────────
-    // Load buffer first, then construct sf::Sound from it (no default ctor).
+    // Charge le buffer d'abord, puis construit le son
     try {
         if (!hitSoundBuf.loadFromFile("data/audio/hit.wav"))
             throw std::runtime_error("Could not load hit.wav");
@@ -178,7 +174,6 @@ Game::~Game()
     delete world;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::resetWorld()
 {
     delete world;
@@ -192,23 +187,22 @@ void Game::resetWorld()
 
     timeLeft             = kBaseDuration - kDeltaDuration * static_cast<float>(currentLevel);
     freezeTimer          = 0.f;
-    prevRewardsCollected = 0;   // reset reward counter for the new level
+    prevRewardsCollected = 0;
 
     float sw = static_cast<float>(window.getSize().x);
     float sh = static_cast<float>(window.getSize().y);
     camera.setCenter({sw / 2.f, sh / 2.f});
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::initHUD()
 {
     const float sw = static_cast<float>(window.getSize().x);
 
-    // Timer
+    // Minuteur
     timerText.setFillColor(sf::Color::White);
     timerText.setPosition({16.f, 10.f});
 
-    // Progress bar
+    // Barre de progression
     progressBg.setSize({160.f, 10.f});
     progressBg.setPosition({16.f, 44.f});
     progressBg.setFillColor(sf::Color(55, 55, 55));
@@ -219,7 +213,7 @@ void Game::initHUD()
     progressFill.setPosition({16.f, 44.f});
     progressFill.setFillColor(sf::Color(70, 200, 70));
 
-    // Hearts
+    // Cœurs
     heartSprites.clear();
     float srcW = static_cast<float>(heartTexture.getSize().x);
     float srcH = static_cast<float>(heartTexture.getSize().y);
@@ -232,11 +226,10 @@ void Game::initHUD()
         heartSprites.push_back(spr);
     }
 
-    // ── Reward scoreboard icon + counter (feature 2) ──────────────────────
     if (world)
     {
         const sf::Texture& rewTex = world->getRewardTexture();
-        rewardIcon.emplace(rewTex);          // construct into optional
+        rewardIcon.emplace(rewTex);
         float rW = static_cast<float>(rewTex.getSize().x);
         float rH = static_cast<float>(rewTex.getSize().y);
         if (rW > 0 && rH > 0)
@@ -246,10 +239,6 @@ void Game::initHUD()
     rewardCountText.setFillColor(sf::Color(255, 220, 60));
     rewardCountText.setPosition({54.f, 63.f});
 
-    // ── PNG image buttons — under the hearts (top-right) ─────────────────────
-    // Hearts: y=10..38, rightmost edge ≈ sw-7
-    // Buttons: y=46, same right alignment, 36×36 px each, 6 px gap
-    // Load all four textures (non-fatal if missing)
     auto loadBtnTex = [](sf::Texture& tex, const std::string& path)
     {
         try {
@@ -265,7 +254,7 @@ void Game::initHUD()
     loadBtnTex(texMute,    "data/images/mute.png");
     loadBtnTex(texUnmute,  "data/images/unmute.png");
 
-    // Helper: build a scaled sprite from a texture
+    // Auxiliaire: crée un sprite mis à l'échelle
     auto makeBtn = [&](sf::Texture& tex) -> sf::Sprite
     {
         sf::Sprite spr(tex);
@@ -276,13 +265,13 @@ void Game::initHUD()
         return spr;
     };
 
-    // Position: pause button left of mute button, flush to right edge
+    // Position: bouton pause à gauche de mute, aligné à droite
     const float btnY  = 46.f;
     const float gap   = 6.f;
     const float muteX  = sw - 7.f  - kBtnSize;
     const float pauseX = muteX - gap - kBtnSize;
 
-    // Build initial sprites (pause = pause.png, mute = unmute.png by default)
+    // Crée les sprites initiaux
     pauseBtn.emplace(makeBtn(state == State::Paused ? texPlay : texPause));
     pauseBtn->setPosition({pauseX, btnY});
 
@@ -293,15 +282,13 @@ void Game::initHUD()
     muteHitbox  = muteBtn->getGlobalBounds();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::updateHUD()
 {
-    // Timer
+    // Minuteur
     std::ostringstream ss;
     ss << "Time: " << static_cast<int>(timeLeft) << "s";
     timerText.setString(ss.str());
 
-    // Progress
     const float Xstart  = 100.f;
     const float Xbunker = 10000.f + 555 * currentLevel;
     const float Xplayer = world->getPlayer().getPosition().x;
@@ -312,17 +299,16 @@ void Game::updateHUD()
     else if (progress < 0.75f) progressFill.setFillColor(sf::Color(220, 190,  40));
     else                       progressFill.setFillColor(sf::Color(80,  160, 255));
 
-    // Hearts
+    // Cœurs
     int lives = world->getPlayer().getLives();
     for (int i = 0; i < 3; ++i)
         heartSprites[i].setColor(i < lives
                                  ? sf::Color(255, 255, 255, 255)
                                  : sf::Color(60,  60,  60,  140));
 
-    // Reward scoreboard counter (feature 2)
     rewardCountText.setString("x" + std::to_string(world->getRewardsCollected()));
 
-    // Swap mute button image: unmute.png = sound on, mute.png = muted
+    // Change l'image du bouton mute
     {
         sf::Texture& t = musicMuted ? texMute : texUnmute;
         float tw = static_cast<float>(t.getSize().x);
@@ -338,7 +324,6 @@ void Game::updateHUD()
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::renderHUD()
 {
     window.setView(window.getDefaultView());
@@ -348,15 +333,13 @@ void Game::renderHUD()
     window.draw(progressFill);
     for (auto& h : heartSprites) window.draw(h);
 
-    // Reward scoreboard (feature 2)
     if (rewardIcon.has_value()) window.draw(*rewardIcon);
     window.draw(rewardCountText);
 
-    // PNG image buttons (feature 3 & 4)
     if (pauseBtn) window.draw(*pauseBtn);
     if (muteBtn)  window.draw(*muteBtn);
 
-    // Level indicator top-centre
+    // Indicateur de niveau en haut au centre
     sf::Text lvlTxt(uiFont, "Level " + std::to_string(currentLevel + 1), 24u);
     lvlTxt.setFillColor(sf::Color(200, 200, 255));
     auto lb = lvlTxt.getLocalBounds();
@@ -365,17 +348,14 @@ void Game::renderHUD()
     window.draw(lvlTxt);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 sf::RenderWindow& Game::getWindow() { return window; }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::handleEvents()
 {
     while (const std::optional event = window.pollEvent())
     {
         if (event->is<sf::Event::Closed>()) window.close();
 
-        // ── Global mute toggle via M key (feature 3) ──────────────────────
         if (const auto* key = event->getIf<sf::Event::KeyPressed>())
             if (key->scancode == sf::Keyboard::Scancode::M)
             {
@@ -383,7 +363,6 @@ void Game::handleEvents()
                 applyMuteState();
             }
 
-        // ── Global mute via mouse click on mute button ─────────────────────
         if (const auto* click = event->getIf<sf::Event::MouseButtonPressed>())
         {
             if (click->button == sf::Mouse::Button::Left)
@@ -397,7 +376,6 @@ void Game::handleEvents()
             }
         }
 
-        // ── State-specific handling ────────────────────────────────────────
         if (state == State::Menu)
         {
             Menu::Choice choice = menu.handleEvent(*event, window);
@@ -449,7 +427,7 @@ void Game::handleEvents()
                     key->scancode == sf::Keyboard::Scancode::Down)
                     world->getPlayer().standUp();
 
-            // Pause button click
+            // Clic sur bouton pause
             if (const auto* click = event->getIf<sf::Event::MouseButtonPressed>())
             {
                 if (click->button == sf::Mouse::Button::Left)
@@ -466,7 +444,7 @@ void Game::handleEvents()
         }
         else if (state == State::Paused)
         {
-            // Resume on P, Space or Enter (feature 4)
+            // Reprendre avec P, Espace ou Entrée
             if (const auto* key = event->getIf<sf::Event::KeyPressed>())
             {
                 if (key->scancode == sf::Keyboard::Scancode::P     ||
@@ -484,7 +462,7 @@ void Game::handleEvents()
                     startMenuMusic();
                 }
             }
-            // Resume button click
+            // Clic sur bouton reprise
             if (const auto* click = event->getIf<sf::Event::MouseButtonPressed>())
             {
                 if (click->button == sf::Mouse::Button::Left)
@@ -501,7 +479,7 @@ void Game::handleEvents()
         }
         else if (state == State::Frozen)
         {
-            // No input during freeze
+            // Aucune entrée pendant le gel
         }
         else if (state == State::Won)
         {
@@ -549,13 +527,12 @@ void Game::handleEvents()
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::update(float dt)
 {
-    // Paused — do nothing (feature 4)
+    // En pause — ne fait rien
     if (state == State::Paused) return;
 
-    // Frozen
+    // Gelé
     if (state == State::Frozen)
     {
         freezeTimer -= dt;
@@ -566,7 +543,7 @@ void Game::update(float dt)
 
     if (state != State::Playing) return;
 
-    // Countdown
+    // Compte à rebours
     timeLeft -= dt;
     if (timeLeft <= 0.f)
     {
@@ -577,7 +554,7 @@ void Game::update(float dt)
         return;
     }
 
-    // Movement input
+    // Entrées de mouvement
     bool ctrl  = sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) ||
                  sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl);
     bool right = sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::Right) ||
@@ -605,7 +582,7 @@ void Game::update(float dt)
             world->getPlayer().setIdle();
     }
 
-    // World update (polymorphic obstacle updates happen inside)
+    // Mise à jour du monde (obstacles polymorphiques)
     GameWorld::HitResult hit = world->update(dt);
 
     if (hit == GameWorld::HitResult::Dead)
@@ -629,7 +606,6 @@ void Game::update(float dt)
         return;
     }
 
-    // ── Collect sound: fire once per newly collected reward ────────────────
     int nowCollected = world->getRewardsCollected();
     if (nowCollected > prevRewardsCollected)
     {
@@ -637,7 +613,7 @@ void Game::update(float dt)
         prevRewardsCollected = nowCollected;
     }
 
-    // Camera tracking
+    // Suivi de la caméra
     float sw      = static_cast<float>(window.getSize().x);
     float sh      = static_cast<float>(window.getSize().y);
     float playerX = world->getPlayer().getPosition().x;
@@ -653,7 +629,6 @@ void Game::update(float dt)
     updateHUD();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 void Game::render()
 {
     window.clear(sf::Color(30, 30, 30));
@@ -662,7 +637,7 @@ void Game::render()
     {
         window.setView(window.getDefaultView());
         if (menuBgSprite.has_value()) window.draw(*menuBgSprite);
-        // Mute button visible in menu
+        // Bouton muet visible dans le menu
         if (muteBtn) window.draw(*muteBtn);
         menu.draw(window);
     }
@@ -699,7 +674,7 @@ void Game::render()
         }
         else if (state == State::Paused)
         {
-            // Pause overlay (feature 4)
+            // Superposition de pause
             window.setView(window.getDefaultView());
 
             sf::RectangleShape overlay;
@@ -716,7 +691,7 @@ void Game::render()
             pauseTxt.setPosition({window.getSize().x / 2.f, window.getSize().y / 2.f});
             window.draw(pauseTxt);
 
-            // Show both buttons on pause screen too
+            // Affiche les deux boutons sur l'écran de pause aussi
             if (pauseBtn) window.draw(*pauseBtn);
             if (muteBtn)  window.draw(*muteBtn);
         }

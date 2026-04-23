@@ -8,18 +8,17 @@ AirObstacle::AirObstacle(sf::Vector2f pos, const sf::Texture& tex,
       timeAccum(0.f)
 {}
 
-// Polymorphic override ─────────────────────────────────────────────────────
-// Adds a vertical sine-wave swoop (amplitude 18 px, period ~2.4 s) on top of
-// the inherited horizontal drift and sprite animation.
+// Ajoute un mouvement sinusoïdal vertical
+// au déplacement horizontal hérité
 void AirObstacle::update(float dt)
 {
-    // Run the base logic (animation frames + leftward move)
+    // Exécute la logique de base
     Obstacle::update(dt);
 
-    // Extra: vertical swooping
+    // Extra: mouvement vertical
     timeAccum   += dt;
-    float baseY  = position.y;          // updated by Obstacle::update above
+    float baseY  = position.y;
     float swoop  = std::sin(timeAccum * 2.6f) * 18.f;
     sprite.setPosition({position.x, baseY + swoop});
-    // Note: position.y is intentionally NOT changed so the swoop stays centred.
+    // Note: position.y n'est pas changée intentionnellement
 }

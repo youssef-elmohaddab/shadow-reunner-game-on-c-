@@ -15,16 +15,12 @@ public:
     void   draw(sf::RenderWindow& window);
     Choice handleEvent(const sf::Event& event,sf::RenderWindow& window);
 
-
-
 private:
     sf::Font                font;
     std::vector<sf::Text>   items;
     int                     selected;
 
-    //  std::vector<sf::Text> items;
     std::vector<sf::RectangleShape> buttons;
-    //  int selected;
 
     void updateColors();
 };

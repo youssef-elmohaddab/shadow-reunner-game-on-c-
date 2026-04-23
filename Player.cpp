@@ -10,11 +10,11 @@ struct AnimConfig
 
 static const AnimConfig configs[] =
 {
-    {8, 0, 0.12f, true },   // Idle
-    {8, 1, 0.09f, true },   // Walk
-    {8, 2, 0.06f, true },   // Run
-    {8, 3, 0.08f, false},   // Jump
-    {3, 4, 0.10f, true }    // Crouch
+    {8, 0, 0.12f, true },
+    {8, 1, 0.09f, true },
+    {8, 2, 0.06f, true },
+    {8, 3, 0.08f, false},
+    {3, 4, 0.10f, true }
 };
 
 Player::Player(sf::Vector2f startPos, const sf::Texture& texture)
@@ -112,8 +112,8 @@ void Player::moveRunBack()
 
 void Player::setIdle()
 {
-    // IMPORTANT: never call setIdle while crouching — it would override
-    // the crouch animation without actually standing the player up.
+    // IMPORTANT: ne jamais appeler setIdle en accroupi
+    // cela écraserait l'animation sans relever le joueur
     if (isCrouching) return;
     isRunning = false;
     if (!isJumping) setCurrentAnim(AnimState::Idle);
@@ -121,7 +121,7 @@ void Player::setIdle()
 
 void Player::crouch()
 {
-    if (isJumping) return;   // can't crouch mid-air
+    if (isJumping) return;   // ne peut pas s'accroupir en l'air
     isCrouching = true;
     setCurrentAnim(AnimState::Crouch);
 }
@@ -163,7 +163,7 @@ void Player::update(float dt)
         }
     }
 
-    // Animation priority: jump > crouch > walk/run/idle
+    // Priorité animation: saut > accroupi > marche/course/immobile
     if      (isJumping)   setCurrentAnim(AnimState::Jump);
     else if (isCrouching) setCurrentAnim(AnimState::Crouch);
 
@@ -197,8 +197,8 @@ sf::FloatRect Player::getHitbox() const
 
     if (isCrouching)
     {
-        float trimSide = b.size.x * 0.20f;   // 20% each side  → 60% wide
-        float topCut   = b.size.y * 0.55f;   // cut top 55%    → 45% tall
+        float trimSide = b.size.x * 0.20f;
+        float topCut   = b.size.y * 0.55f;
         return sf::FloatRect(
         { b.position.x + trimSide,      b.position.y + topCut },
         { b.size.x - trimSide * 2.f,    b.size.y - topCut     }
@@ -206,7 +206,7 @@ sf::FloatRect Player::getHitbox() const
     }
     else
     {
-        // Standing / jumping: centre 60% wide, 85% tall (trim 10% top, 5% bot).
+
         float trimSide = b.size.x * 0.20f;
         float trimTop  = b.size.y * 0.10f;
         float trimBot  = b.size.y * 0.05f;
