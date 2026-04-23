@@ -1,4 +1,4 @@
-﻿#include "Menu.hpp"
+﻿#include "../include/Menu.hpp"
 #include <iostream>
 
 Menu::Menu(sf::RenderWindow& window) : selected(0)

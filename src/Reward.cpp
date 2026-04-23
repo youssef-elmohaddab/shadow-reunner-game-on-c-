@@ -1,4 +1,4 @@
-#include "Reward.hpp"
+#include "../include/Reward.hpp"
 
 Reward::Reward(const sf::Texture& tex, sf::Vector2f pos, float size)
     : sprite(tex), collected(false)

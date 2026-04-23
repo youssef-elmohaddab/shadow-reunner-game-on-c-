@@ -1,4 +1,4 @@
-#include "AirObstacle.hpp"
+#include "../include/AirObstacle.hpp"
 #include <cmath>
 
 AirObstacle::AirObstacle(sf::Vector2f pos, const sf::Texture& tex,

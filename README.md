@@ -33,19 +33,65 @@ Sur Windows :
 Téléchargez SFML depuis https://www.sfml-dev.org/download.php et configurez votre IDE.
 
 ### 2. Compiler le projet
-```bash
-g++ -std=c++17 -c *.cpp
-g++ -std=c++17 -o jeu *.o -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
-```
 
-Ou utilisez le Makefile s'il est présent :
+**Option A : Avec Make**
 ```bash
 make
 ```
 
+**Option B : Avec CMake**
+```bash
+mkdir build
+cd build
+cmake ..
+make
+```
+
+**Option C : Compilation manuelle**
+```bash
+g++ -std=c++17 -I./include -c src/*.cpp
+g++ -std=c++17 -o JeuPlateforme *.o -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+```
+
 ## Exécution
 ```bash
-./jeu
+./JeuPlateforme
+```
+
+## Structure du Projet
+```
+├── include/              # Fichiers d'en-tête (.hpp)
+│   ├── game.hpp
+│   ├── Player.hpp
+│   ├── Obstacle.hpp
+│   ├── AirObstacle.hpp
+│   ├── GroundObstacle.hpp
+│   ├── GameWorld.hpp
+│   ├── Reward.hpp
+│   ├── Bunker.hpp
+│   ├── Menu.hpp
+│   ├── LevelSelect.hpp
+│   └── LevelConfig.hpp
+├── src/                  # Fichiers source (.cpp)
+│   ├── main.cpp
+│   ├── game.cpp
+│   ├── Player.cpp
+│   ├── Obstacle.cpp
+│   ├── AirObstacle.cpp
+│   ├── GroundObstacle.cpp
+│   ├── GameWorld.cpp
+│   ├── Reward.cpp
+│   ├── Bunker.cpp
+│   ├── Menu.cpp
+│   └── LevelSelect.cpp
+├── assets/               # Ressources du jeu
+│   ├── sprites/
+│   ├── fonts/
+│   ├── music/
+│   └── sounds/
+├── CMakeLists.txt        # Configuration CMake
+├── Makefile              # Configuration Make
+└── README.md             # Ce fichier
 ```
 
 ## Contrôles
@@ -54,20 +100,6 @@ make
 - **Espace / Flèche haut / W** : Sauter
 - **Flèche bas / S** : S'accroupir
 - **Échap** : Retour au menu / Quitter
-
-## Structure du Projet
-- `main.cpp` : Point d'entrée du programme
-- `Game.hpp/cpp` : Gestion principale du jeu et des états
-- `Player.hpp/cpp` : Logique du joueur et animations
-- `Obstacle.hpp/cpp` : Classe de base pour les obstacles
-- `AirObstacle.hpp/cpp` : Obstacles aériens
-- `GroundObstacle.hpp/cpp` : Obstacles au sol
-- `GameWorld.hpp/cpp` : Monde de jeu, collisions et rendu
-- `Reward.hpp/cpp` : Système de récompenses
-- `Bunker.hpp/cpp` : Objectif de fin de niveau
-- `Menu.hpp/cpp` : Menu principal
-- `LevelSelect.hpp/cpp` : Écran de sélection des niveaux
-- `LevelConfig.hpp` : Configuration des paramètres de niveaux
 
 ## Ressources
 Assurez-vous que les dossiers suivants sont présents avec les ressources nécessaires :
