@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "game.hpp"
+#include "../include/game.hpp"
 #include <iostream>
 #include <stdexcept>
 

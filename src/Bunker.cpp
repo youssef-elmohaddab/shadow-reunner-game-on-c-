@@ -1,4 +1,4 @@
-#include "Bunker.hpp"
+#include "../include/Bunker.hpp"
 
 Bunker::Bunker(const sf::Texture& tex, sf::Vector2f pos, float w, float h)
     : sprite(tex), position(pos), reached(false)

@@ -1,6 +1,6 @@
-#include "GameWorld.hpp"
-#include "GroundObstacle.hpp"
-#include "AirObstacle.hpp"
+#include "../include/GameWorld.hpp"
+#include "../include/GroundObstacle.hpp"
+#include "../include/AirObstacle.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>

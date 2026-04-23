@@ -1,4 +1,4 @@
-#include "Obstacle.hpp"
+#include "../include/Obstacle.hpp"
 
 Obstacle::Obstacle(sf::Vector2f pos, ObstacleType m_type,
                    const sf::Texture& tex,
